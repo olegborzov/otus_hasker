@@ -46,23 +46,23 @@ mkdir -p /usr/local/etc
 
 cat > /usr/local/etc/uwsgi.ini << EOF
 [uwsgi]
-project = ${PROJECT_NAME}
 chdir = ${PROJECT_FOLDER}
-module = hasker.wsgi:application
+module = ${PROJECT_NAME}.wsgi:application
 
 master = true
 processes = 1
 
-socket = /run/uwsgi/%(project).sock
+socket = /run/uwsgi/${PROJECT_NAME}.sock
 chmod-socket = 666
+chown-socket = nginx:nginx
 vacuum = true
-
 die-on-term = true
-env = DJANGO_SETTINGS_MODULE=${CONFIG}
-env = SECRET_KEY=${SECRET_KEY}
-env = DB_NAME=${DB_NAME}
-env = DB_USER=${DB_USER}
-env = DB_PASSWORD=${DB_PASSWORD}
+
+env=DJANGO_SETTINGS_MODULE=${CONFIG}
+env=SECRET_KEY=${SECRET_KEY}
+env=DB_NAME=${DB_NAME}
+env=DB_USER=${DB_USER}
+env=DB_PASSWORD=${DB_PASSWORD}
 EOF
 
 
@@ -74,6 +74,10 @@ cat > /etc/nginx/conf.d/${PROJECT_NAME}.conf << EOF
 server {
     listen 80;
     server_name localhost 127.0.0.1;
+
+    access_log /var/log/nginx/$PROJECT_NAME-access.log combined;
+    error_log  /var/log/nginx/$PROJECT_NAME-error.log error;
+
     location /static/ {
         root /var/www;
     }
@@ -81,8 +85,8 @@ server {
         root /var/www;
     }
     location / {
-        include uwsgi_params;
         uwsgi_pass unix:/run/uwsgi/${PROJECT_NAME}.sock;
+        include uwsgi_params;
     }
 }
 EOF
@@ -102,5 +106,5 @@ done
 
 
 echo "8. Start nginx..."
-service nginx start
 uwsgi --ini /usr/local/etc/uwsgi.ini &
+service nginx start
