@@ -26,7 +26,7 @@ apt-get -qq -y upgrade
 
 
 echo "2. Try to install required packages..."
-PACKAGES=('nginx' 'postgresql' 'python3' 'python-pip3')
+PACKAGES=('nginx' 'postgresql' 'python3' 'python3-pip')
 for pkg in "${PACKAGES[@]}"
 do
     echo "Installing '$pkg'..."
