@@ -75,11 +75,11 @@ chmod-socket = 666
 vacuum = true
 
 die-on-term = true
-env=DJANGO_SETTINGS_MODULE=hasker.settings.production
-env=SECRET_KEY=$SECRET_KEY
-env=DB_NAME=$DB_NAME
-env=DB_USER=$DB_USER
-env=DB_PASSWORD=$DB_PASSWORD
+env = DJANGO_SETTINGS_MODULE=hasker.settings.production
+env = SECRET_KEY=$SECRET_KEY
+env = DB_NAME=$DB_NAME
+env = DB_USER=$DB_USER
+env = DB_PASSWORD=$DB_PASSWORD
 EOF
 
 
