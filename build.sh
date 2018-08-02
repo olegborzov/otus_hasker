@@ -103,4 +103,4 @@ done
 
 echo "8. Start nginx..."
 service nginx start
-uwsgi --ini /usr/local/etc/uwsgi.ini
+uwsgi --ini /usr/local/etc/uwsgi.ini &
