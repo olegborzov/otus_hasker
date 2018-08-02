@@ -1,13 +1,4 @@
 #!/usr/bin/env bash
-# Шаги:
-# 1. Константы для проекта
-# 2. Обновление системы, установка нужных пакетов
-# 3. Установка пакетов python из requirements.txt
-# 4. Запуск, настройка PostgreSQL: создание юзера и БД
-# 5. Настройка UWSGI
-# 6. Подготовка Django - миграции, сборка статик файлов
-# 7. Настройка nginx
-# 8. Запуск nginx
 
 # Project settings
 PROJECT_NAME=hasker
@@ -60,9 +51,7 @@ chdir = ${PROJECT_FOLDER}
 module = hasker.wsgi:application
 
 master = true
-processes = 5
-
-logto = /var/log/${PROJECT_NAME}.log
+processes = 1
 
 socket = /run/uwsgi/%(project).sock
 chmod-socket = 666
@@ -74,6 +63,28 @@ env = SECRET_KEY=${SECRET_KEY}
 env = DB_NAME=${DB_NAME}
 env = DB_USER=${DB_USER}
 env = DB_PASSWORD=${DB_PASSWORD}
+EOF
+
+
+echo "6. Configure nginx..."
+mkdir /var/www/static
+mkdir /var/www/media
+
+cat > /etc/nginx/conf.d/${PROJECT_NAME}.conf << EOF
+server {
+    listen 80;
+    server_name localhost 127.0.0.1;
+    location /static/ {
+        root /var/www;
+    }
+    location /media/ {
+        root /var/www;
+    }
+    location / {
+        include uwsgi_params;
+        uwsgi_pass unix:/run/uwsgi/${PROJECT_NAME}.sock;
+    }
+}
 EOF
 
 
@@ -90,25 +101,6 @@ do
 done
 
 
-echo "7. Configure nginx..."
-cat > /etc/nginx/conf.d/${PROJECT_NAME}.conf << EOF
-server {
-    listen 8000;
-    server_name localhost 127.0.0.1;
-    location /static/ {
-        root /var/www;
-    }
-    location /media/ {
-        root /var/www;
-    }
-    location / {
-        include uwsgi_params;
-        uwsgi_pass unix:/run/uwsgi/${PROJECT_NAME}.sock;
-    }
-}
-EOF
-
-
 echo "8. Start nginx..."
-uwsgi --ini /usr/local/etc/uwsgi.ini &
 service nginx start
+uwsgi --ini /usr/local/etc/uwsgi.ini
