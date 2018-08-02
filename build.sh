@@ -13,10 +13,11 @@
 PROJECT_NAME=hasker
 PROJECT_FOLDER=$(pwd)
 SECRET_KEY="$(openssl rand -base64 50)"
+CONFIG="hasker.settings.production"
 
 # Postgres settings
-DB_NAME=$PROJECT_NAME
-DB_USER=$PROJECT_NAME
+DB_NAME=${PROJECT_NAME}_db
+DB_USER=${PROJECT_NAME}_db_admin
 DB_PASSWORD=Hasker1234
 
 
@@ -26,11 +27,11 @@ apt-get -qq -y upgrade
 
 
 echo "2. Try to install required packages..."
-PACKAGES=('nginx' 'postgresql' 'python3' 'python3-pip')
+PACKAGES=('nginx' 'libpq-dev' 'postgresql' 'python3' 'python3-pip')
 for pkg in "${PACKAGES[@]}"
 do
     echo "Installing '$pkg'..."
-    apt-get -qq -y install $pkg
+    apt-get -qq -y install ${pkg}
     if [ $? -ne 0 ]; then
         echo "Error installing system packages '$pkg'"
         exit 1
@@ -39,7 +40,6 @@ done
 
 
 echo "3. Try to install Python3 project dependencies..."
-pip3 install --upgrade pip
 pip3 install -r requirements/production.txt
 
 
@@ -55,31 +55,50 @@ mkdir -p /usr/local/etc
 
 cat > /usr/local/etc/uwsgi.ini << EOF
 [uwsgi]
-project = $PROJECT_NAME
-chdir = $PROJECT_FOLDER
+project = ${PROJECT_NAME}
+chdir = ${PROJECT_FOLDER}
 module = hasker.wsgi:application
 
 master = true
 processes = 5
 
-logto = /var/log/$PROJECT_NAME.log
+logto = /var/log/${PROJECT_NAME}.log
 
 socket = /run/uwsgi/%(project).sock
 chmod-socket = 666
 vacuum = true
 
 die-on-term = true
-env = DJANGO_SETTINGS_MODULE=hasker.settings.production
-env = SECRET_KEY=$SECRET_KEY
-env = DB_NAME=$DB_NAME
-env = DB_USER=$DB_USER
-env = DB_PASSWORD=$DB_PASSWORD
+env = DJANGO_SETTINGS_MODULE=${CONFIG}
+env = SECRET_KEY=${SECRET_KEY}
+env = DB_NAME=${DB_NAME}
+env = DB_USER=${DB_USER}
+env = DB_PASSWORD=${DB_PASSWORD}
 EOF
 
 
 echo "6. Prepare Django..."
+DJANGO_SETTINGS_MODULE=${CONFIG} \
+SECRET_KEY=${SECRET_KEY} \
+DB_NAME=${DB_NAME} \
+DB_USER=${DB_USER} \
+DB_PASSWORD=${DB_PASSWORD} \
 python3 manage.py collectstatic
+
+
+DJANGO_SETTINGS_MODULE=${CONFIG} \
+SECRET_KEY=${SECRET_KEY} \
+DB_NAME=${DB_NAME} \
+DB_USER=${DB_USER} \
+DB_PASSWORD=${DB_PASSWORD} \
 python3 manage.py makemigrations
+
+
+DJANGO_SETTINGS_MODULE=${CONFIG} \
+SECRET_KEY=${SECRET_KEY} \
+DB_NAME=${DB_NAME} \
+DB_USER=${DB_USER} \
+DB_PASSWORD=${DB_PASSWORD} \
 python3 manage.py migrate
 
 
