@@ -77,6 +77,12 @@ env = DB_PASSWORD=$DB_PASSWORD
 EOF
 
 
+echo "6. Prepare Django..."
+python3 manage.py collectstatic
+python3 manage.py makemigrations
+python3 manage.py migrate
+
+
 echo "7. Configure nginx..."
 cat > /etc/nginx/conf.d/${PROJECT_NAME}.conf << EOF
 server {
@@ -99,9 +105,3 @@ EOF
 echo "8. Start nginx..."
 uwsgi --ini /usr/local/etc/uwsgi.ini &
 service nginx start
-
-
-echo "6. Prepare Django..."
-python3 manage.py collectstatic
-python3 manage.py makemigrations
-python3 manage.py migrate
