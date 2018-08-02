@@ -4,8 +4,8 @@
 # 2. Обновление системы, установка нужных пакетов
 # 3. Установка пакетов python из requirements.txt
 # 4. Запуск, настройка PostgreSQL: создание юзера и БД
-# 5. Подготовка Django - миграции, сборка статик файлов
-# 6. Настройка UWSGI
+# 5. Настройка UWSGI
+# 6. Подготовка Django - миграции, сборка статик файлов
 # 7. Настройка nginx
 # 8. Запуск nginx
 
@@ -49,13 +49,7 @@ su postgres -c "psql -c \"CREATE USER ${DB_USER} PASSWORD '${DB_PASSWORD}'\""
 su postgres -c "psql -c \"CREATE DATABASE ${DB_NAME} OWNER ${DB_USER}\""
 
 
-echo "5. Prepare Django..."
-python3 manage.py collectstatic
-python3 manage.py makemigrations
-python3 manage.py migrate
-
-
-echo "6. Configure uwsgi..."
+echo "5. Configure uwsgi..."
 mkdir -p /run/uwsgi
 mkdir -p /usr/local/etc
 
@@ -81,6 +75,12 @@ env = DB_NAME=$DB_NAME
 env = DB_USER=$DB_USER
 env = DB_PASSWORD=$DB_PASSWORD
 EOF
+
+
+echo "6. Prepare Django..."
+python3 manage.py collectstatic
+python3 manage.py makemigrations
+python3 manage.py migrate
 
 
 echo "7. Configure nginx..."
