@@ -78,28 +78,16 @@ EOF
 
 
 echo "6. Prepare Django..."
-DJANGO_SETTINGS_MODULE=${CONFIG} \
-SECRET_KEY=${SECRET_KEY} \
-DB_NAME=${DB_NAME} \
-DB_USER=${DB_USER} \
-DB_PASSWORD=${DB_PASSWORD} \
-python3 manage.py collectstatic
-
-
-DJANGO_SETTINGS_MODULE=${CONFIG} \
-SECRET_KEY=${SECRET_KEY} \
-DB_NAME=${DB_NAME} \
-DB_USER=${DB_USER} \
-DB_PASSWORD=${DB_PASSWORD} \
-python3 manage.py makemigrations
-
-
-DJANGO_SETTINGS_MODULE=${CONFIG} \
-SECRET_KEY=${SECRET_KEY} \
-DB_NAME=${DB_NAME} \
-DB_USER=${DB_USER} \
-DB_PASSWORD=${DB_PASSWORD} \
-python3 manage.py migrate
+COMMANDS=('collectstatic' 'makemigrations user' 'makemigrations' 'migrate')
+for COMMAND in "${COMMANDS[@]}"
+do
+    DJANGO_SETTINGS_MODULE=${CONFIG} \
+    SECRET_KEY=${SECRET_KEY} \
+    DB_NAME=${DB_NAME} \
+    DB_USER=${DB_USER} \
+    DB_PASSWORD=${DB_PASSWORD} \
+    python3 manage.py ${COMMAND}
+done
 
 
 echo "7. Configure nginx..."
