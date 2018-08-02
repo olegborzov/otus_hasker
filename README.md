@@ -35,3 +35,9 @@ git clone
 cd hasker
 make prod
 ```
+
+### Author
+
+Борзов Олег
+
+slack: Oleg Borzov (olegborzov)
