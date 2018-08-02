@@ -32,7 +32,7 @@ git clone https://github.com/olegborzov/otus_hasker.git
 
 ### Build
 ```
-cd hasker
+cd otus_hasker
 make prod
 ```
 
