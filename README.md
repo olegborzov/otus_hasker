@@ -27,7 +27,7 @@ docker run --rm -it -p 8000:80 ubuntu /bin/bash
 apt-get update
 apt-get upgrade
 apt-get install -y git
-git clone 
+git clone https://github.com/olegborzov/otus_hasker.git
 ```
 
 ### Build
