@@ -1,1 +1,1 @@
-prod:	./build.sh
+prod:	./build.sh
