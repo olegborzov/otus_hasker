@@ -17,7 +17,9 @@ from datetime import timedelta
 
 
 def root(*dirs):
-    base_dir = os.path.join(os.path.dirname(__file__), '..', '..')
+    base_dir = os.path.join(
+        os.path.dirname(os.path.realpath(__file__)), '..', '..'
+    )
     return os.path.abspath(os.path.join(base_dir, *dirs))
 
 
