@@ -93,7 +93,7 @@ EOF
 
 
 echo "6. Prepare Django..."
-COMMANDS=('collectstatic' 'makemigrations user' 'makemigrations' 'migrate')
+COMMANDS=('collectstatic' 'makemigrations' 'migrate')
 for COMMAND in "${COMMANDS[@]}"
 do
     DJANGO_SETTINGS_MODULE=${CONFIG} \
