@@ -1,1 +1,2 @@
-prod:	./build.sh
+prod:
+	cd . && ./build.sh 
