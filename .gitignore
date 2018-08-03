@@ -74,7 +74,8 @@ coverage.xml
 # Django stuff:
 *.log
 local_settings.py
-migrations/[0-9]*.py
+/**/migrations/*.py
+!/**/migrations/__init__.py
 
 # Flask stuff:
 instance/

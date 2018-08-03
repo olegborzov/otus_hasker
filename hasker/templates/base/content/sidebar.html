@@ -1,0 +1,21 @@
+{% if user.is_authenticated %}
+    <div class="p-3">
+        <a href="{% url "question:add" %}">Задать вопрос</a>
+    </div>
+{% endif %}
+<div class="p-3 sidebar_questions">
+    <h4>В тренде</h4>
+    {% load sidebar %}
+    {% top_questions as top_q %}
+
+    <ol class="list-unstyled mb-0">
+    {% for q in top_q %}
+        <li>
+            <span>{{ q.votes }}</span>
+            <a href="{{ q.url }}">
+                {{ q.title|truncatewords:8 }}
+            </a>
+        </li>
+    {% endfor %}
+    </ol>
+</div>

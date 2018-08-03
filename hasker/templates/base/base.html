@@ -12,7 +12,7 @@
 </head>
 
 <body>
-    <div class="container">{% include "base/parts/header.html" %}</div>
+    <div class="container">{% include "base/content/header.html" %}</div>
 
     <main role="main" class="container">
         <div class="row">
@@ -21,7 +21,7 @@
                 {% block content %}Test{% endblock %}
             </div>
             <aside class="col-md-3 blog-sidebar">
-                {% include "base/parts/sidebar.html" %}
+                {% include "base/content/sidebar.html" %}
             </aside>
         </div>
     </main>
