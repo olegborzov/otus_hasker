@@ -5,6 +5,7 @@ homework/
 hw5_django*/
 *.sqlite
 *.sqlite3
+media/
 
 # Archives
 *.tar
