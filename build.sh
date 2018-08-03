@@ -46,7 +46,7 @@ mkdir -p /usr/local/etc
 
 cat > /usr/local/etc/uwsgi.ini << EOF
 [uwsgi]
-chdir = ${PROJECT_FOLDER}
+chdir = ${PROJECT_FOLDER}/
 module = ${PROJECT_NAME}.wsgi:application
 
 master = true
