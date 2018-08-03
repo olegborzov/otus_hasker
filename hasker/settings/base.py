@@ -111,10 +111,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
+STATICFILES_DIRS = [root('hasker', 'static_files')]
+
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
-
-STATICFILES_DIRS = [root('hasker', 'static_files')]
 
 
 # User settings: auth pages, base user model

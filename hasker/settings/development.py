@@ -21,5 +21,5 @@ DATABASES = {
     }
 }
 
-MEDIA_ROOT = root('media')
-STATIC_ROOT = root('static')
+STATIC_ROOT = root('static/')
+MEDIA_ROOT = root('media/')
