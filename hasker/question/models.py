@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, transaction
 from django.urls import reverse
 
 from django.conf import settings
@@ -24,6 +24,7 @@ class AbstractQA(models.Model):
     def votes(self):
         return self.likers.count() - self.dislikers.count()
 
+    @transaction.atomic
     def vote(self, user, like=True):
         if like:
             self.dislikers.remove(user)

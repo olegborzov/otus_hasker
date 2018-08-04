@@ -1,3 +1,6 @@
+from functools import partial
+
+from django.db import transaction
 from django.forms import (ModelForm, ModelMultipleChoiceField, SelectMultiple,
                           ValidationError)
 from django.conf import settings
@@ -26,17 +29,18 @@ class AnswerForm(ModelForm):
             Submit('add', 'Добавить', css_class='btn-primary')
         )
 
+    @transaction.atomic
     def save(self, commit=True):
         answer = super().save(commit)
-        self.notify_question_author(answer)
+        transaction.on_commit(partial(self.notify_question_author, answer))
         return answer
 
     @staticmethod
     def notify_question_author(answer):
-        title_trunced = Truncator(answer.question.title)
+        title_truncated = Truncator(answer.question.title)
 
         subject = "Новый ответ к вопросу {} - Hasker".format(
-            title_trunced.words(5)
+            title_truncated.words(5)
         )
         message = """
             <p>Получен новый ответ от пользователя {answer_author}
@@ -45,7 +49,7 @@ class AnswerForm(ModelForm):
         """.format(
             answer_author=answer.author.username,
             q_url=answer.question.url,
-            q_title=title_trunced.words(10),
+            q_title=title_truncated.words(10),
             a_text=Truncator(answer.text).words(25)
         )
         from_email = settings.TECH_EMAIL
@@ -97,6 +101,10 @@ class QuestionForm(ModelForm):
                 Submit('add_edit', 'Отправить', css_class='button white')
             )
         )
+
+    @transaction.atomic
+    def save(self, commit=True):
+        return super().save(commit)
 
     def clean_tags(self):
         tags = self.cleaned_data["tags"]
