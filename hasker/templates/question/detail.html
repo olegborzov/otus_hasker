@@ -132,7 +132,7 @@
             {% endfor %}
         </div>
 
-        {% include "base/parts/paginator.html" with page_obj=answers_page_obj %}
+        {% include "base/content/paginator.html" with page_obj=answers_page_obj %}
     {% endif %}
 
     {% if user.is_authenticated and user != question.author %}

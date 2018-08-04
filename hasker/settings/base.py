@@ -17,7 +17,9 @@ from datetime import timedelta
 
 
 def root(*dirs):
-    base_dir = os.path.join(os.path.dirname(__file__), '..', '..')
+    base_dir = os.path.join(
+        os.path.dirname(os.path.realpath(__file__)), '..', '..'
+    )
     return os.path.abspath(os.path.join(base_dir, *dirs))
 
 
@@ -111,10 +113,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
+STATICFILES_DIRS = [root('hasker', 'static_files')]
+
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
-
-STATICFILES_DIRS = [root('hasker', 'static_files')]
 
 
 # User settings: auth pages, base user model

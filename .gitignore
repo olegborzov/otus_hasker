@@ -5,6 +5,7 @@ homework/
 hw5_django*/
 *.sqlite
 *.sqlite3
+media/
 
 # Archives
 *.tar
@@ -74,7 +75,8 @@ coverage.xml
 # Django stuff:
 *.log
 local_settings.py
-migrations/[0-9]*.py
+/**/migrations/*.py
+!/**/migrations/__init__.py
 
 # Flask stuff:
 instance/

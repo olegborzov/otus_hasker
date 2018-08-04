@@ -46,7 +46,7 @@ mkdir -p /usr/local/etc
 
 cat > /usr/local/etc/uwsgi.ini << EOF
 [uwsgi]
-chdir = ${PROJECT_FOLDER}/
+chdir = ${PROJECT_FOLDER}
 module = ${PROJECT_NAME}.wsgi:application
 
 master = true
@@ -54,7 +54,6 @@ processes = 1
 
 socket = /run/uwsgi/${PROJECT_NAME}.sock
 chmod-socket = 666
-chown-socket = nginx:nginx
 vacuum = true
 die-on-term = true
 
