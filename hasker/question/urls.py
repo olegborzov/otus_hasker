@@ -48,8 +48,5 @@ urlpatterns = [
     ),
 
     # Tags
-    path("tag/", include(([
-        path("add/", views.add_tag, name="add"),
-        path("<str:name>/", views.QuestionList.as_view(), name="detail"),
-    ], "tag"))),
+    path("tag/", include(tags_patterns)),
 ]

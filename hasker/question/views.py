@@ -3,8 +3,10 @@ from django.views.generic import (ListView, DetailView,
                                   CreateView, UpdateView)
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q, F, Count
-from django.http import (HttpResponse,
-                         HttpResponseBadRequest, HttpResponseNotAllowed)
+from django.http import (
+    HttpResponse, HttpResponseBadRequest,
+    HttpResponseNotAllowed, HttpResponseForbidden
+)
 from django.urls import resolve
 from django.core.exceptions import PermissionDenied, ObjectDoesNotExist
 from django.core import paginator
@@ -42,24 +44,33 @@ def vote(request):
     vote_id = request.POST.get("vote_id", None)
     vote_action = request.POST.get("vote_action", None)
 
+    if not request.user.is_authenticated:
+        return HttpResponseForbidden("Not authenticated")
+
     if not (vote_type and vote_id and vote_action):
-        return HttpResponseBadRequest()
+        return HttpResponseBadRequest("Bad POST data")
 
     try:
+        vote_id = int(vote_id)
         if vote_type == "a":
             obj = Answer.objects.get(pk=vote_id)
         elif vote_type == "q":
             obj = Question.objects.get(pk=vote_id)
         else:
-            return HttpResponseBadRequest()
+            return HttpResponseBadRequest("Bad vote_type")
 
         if vote_action not in ["like", "dislike"]:
-            return HttpResponseBadRequest()
+            return HttpResponseBadRequest("Bad vote_action")
+
+        if obj.author == request.user:
+            return HttpResponseForbidden("Can't vote own question/answer")
 
         to_like = vote_action == "like"
         obj.vote(request.user, to_like)
-    except (ObjectDoesNotExist,):
-        return HttpResponseBadRequest()
+    except (ObjectDoesNotExist, ):
+        return HttpResponseBadRequest("Bad vote_id - obj not exist")
+    except ValueError:
+        return HttpResponseBadRequest("Bad vote_id - not int")
 
     return HttpResponse(obj.votes)
 
@@ -82,9 +93,13 @@ class QuestionList(ListView):
             self.title = "Тег: {}".format(self.tag_name)
         elif url_name == "search_results":
             self.search_phrase = self.request.GET.get("q", "")
+            if not self.search_phrase:
+                return HttpResponseBadRequest("Пустой поисковый запрос")
             self.title = "Результаты по запросу: {}".format(self.search_phrase)
             if self.search_phrase.startswith("tag:"):
                 tag_name = self.search_phrase[4:]
+                if not tag_name:
+                    return HttpResponseBadRequest("Пустой тег")
                 return redirect("question:tag:detail", name=tag_name)
         return super().dispatch(request, *args, **kwargs)
 

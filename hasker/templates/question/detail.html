@@ -53,7 +53,7 @@
     <div id="q_{{ question.id }}" class="qa_detail">
 
         <div class="qa_rate qa_part">
-            {% if user != question.author %}
+            {% if user != question.author and user.is_authenticated %}
                 <a class="arr_up arr" href="#" id="q_{{ question.pk }}_like"></a>
                 <span>{{ question.votes }}</span>
                 <a class="arr_down arr" href="#" id="q_{{ question.pk }}_dislike"></a>
@@ -96,7 +96,7 @@
                 <div id="a_{{ answer.id }}" class="qa_detail">
 
                     <div class="qa_rate qa_part">
-                        {% if user != answer.author %}
+                        {% if user != answer.author and user.is_authenticated %}
                             <a class="arr_up arr" href="#" id="a_{{ answer.pk }}_like"></a>
                             <span>{{ answer.votes }}</span>
                             <a class="arr_down arr" href="#" id="a_{{ answer.pk }}_dislike"></a>
