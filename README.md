@@ -1,9 +1,9 @@
 # Hasker: Poor Man's Stackoverflow
-Homework for Otus course - https://otus.ru/lessons/razrabotchik-python/
+Homework for Otus course - https://otus.ru/lessons/razrabotchik-python/ <br>
 Q&A analog of stackoverflow on Django 2.0
 
 ### Author
-Борзов Олег
+Борзов Олег<br>
 slack: Oleg Borzov (olegborzov)
 
 ### Requirements
