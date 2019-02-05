@@ -1,5 +1,10 @@
 # Hasker: Poor Man's Stackoverflow
+Homework for Otus course - https://otus.ru/lessons/razrabotchik-python/
 Q&A analog of stackoverflow on Django 2.0
+
+### Author
+Борзов Олег
+slack: Oleg Borzov (olegborzov)
 
 ### Requirements
 <ul>
@@ -17,7 +22,7 @@ Q&A analog of stackoverflow on Django 2.0
     <li>Pillow</li>
 </ul>
 
-### Run Docker
+### Run Docker container
 ```
 docker run --rm -it -p 8000:80 ubuntu /bin/bash
 ```
@@ -35,9 +40,3 @@ git clone https://github.com/olegborzov/otus_hasker.git
 cd otus_hasker
 make prod
 ```
-
-### Author
-
-Борзов Олег
-
-slack: Oleg Borzov (olegborzov)
