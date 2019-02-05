@@ -4,7 +4,7 @@ Q&A analog of stackoverflow on Django 2.0
 
 ### Author
 Борзов Олег<br>
-slack: Oleg Borzov (olegborzov)
+http://olegborzov.ru/
 
 ### Requirements
 <ul>
